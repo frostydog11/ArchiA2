@@ -1,4 +1,4 @@
-namespace A1_AutoDetail.App.Entities;
+namespace A1_AutoDetail.App.Domain.Entities;
 
 public sealed class DetailService
 {
