@@ -1,4 +1,4 @@
-using A1_AutoDetail.App.Entities;
+using A1_AutoDetail.App.Domain.Entities;
 using A1_AutoDetail.App.Persistence;
 using Microsoft.EntityFrameworkCore;
 
