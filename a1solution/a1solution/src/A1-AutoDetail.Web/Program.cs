@@ -1,5 +1,7 @@
 using A1_AutoDetail.App.Persistence;
 using A1_AutoDetail.App.Services;
+using A1_AutoDetail.App.Domain.Contracts;
+using A1_AutoDetail.App.Persistence.Dao;
 using Microsoft.EntityFrameworkCore;
 
 namespace A1_AutoDetail
@@ -16,6 +18,7 @@ namespace A1_AutoDetail
             // Inject the Service Layer classes. These may be used by the Controller.
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IBookingDataAdapter, BookingDataAdapter>();
+            builder.Services.AddScoped<IBookingDao, BookingDao>();
 
             // Inject the DbContext class.
             // This should be used by the Service layer, NOT by the Controller.

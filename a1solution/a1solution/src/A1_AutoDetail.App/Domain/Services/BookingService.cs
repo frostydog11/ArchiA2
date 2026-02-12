@@ -1,15 +1,14 @@
 using A1_AutoDetail.App.Domain.Entities;
-using A1_AutoDetail.App.Persistence;
-using A1_AutoDetail.App.Persistence.Dao;
+using A1_AutoDetail.App.Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace A1_AutoDetail.App.Services;
 
 public sealed class BookingService : IBookingService
 {
-    private readonly BookingDao _dao;
+    private readonly IBookingDao _dao;
 
-    public BookingService(BookingDao dao)
+    public BookingService(IBookingDao dao)
     {
         _dao = dao;
     }

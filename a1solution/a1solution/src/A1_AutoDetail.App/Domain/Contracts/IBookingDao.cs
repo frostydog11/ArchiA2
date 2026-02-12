@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace A1_AutoDetail.App.Domain.Contracts
 {
-    internal interface IBookingDao
+    public interface IBookingDao
     {
         public Booking FindBooking(int bookingId);
 
