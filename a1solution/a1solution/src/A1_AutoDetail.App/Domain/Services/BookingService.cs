@@ -42,10 +42,13 @@ public sealed class BookingService : IBookingService
             return BookingFailed(BookingOutcome.TooSoonForService, "That service requires more notice.");
         
         var bookingId = AddBooking(customerId, detailServiceId, timeSlotId, nowUtc);
-        return BookingSucceeded(BookingOutcome.Success, "Booking created.", bookingId); 
+        if (bookingId != null)
+            return BookingSucceeded(BookingOutcome.Success, "Booking created.", bookingId);
+        else
+            return BookingFailed(BookingOutcome.PersistenceError, "Unable to create booking. An unexpected error has occurred."); 
     }
 
-    private int AddBooking(int customerId, int detailServiceId, int timeSlotId, DateTime nowUtc) // dao
+    private int? AddBooking(int customerId, int detailServiceId, int timeSlotId, DateTime nowUtc) // dao
     {
         var booking = new Booking();
         booking.CustomerId = customerId;
@@ -56,7 +59,7 @@ public sealed class BookingService : IBookingService
         return _dao.AddBooking(booking);
     }
 
-    private BookingResult BookingSucceeded(BookingOutcome outcome, string message, int bookingId)
+    private BookingResult BookingSucceeded(BookingOutcome outcome, string message, int? bookingId)
     {
         var r = new BookingResult();
         r.Outcome = outcome;
@@ -73,32 +76,6 @@ public sealed class BookingService : IBookingService
         r.BookingId = null;
         return r;
     }
-
-    //private bool IsTimeSlotAlreadyBooked(int timeSlotId) // dao
-    //{
-    //    var q =
-    //        from b in _db.Bookings.AsNoTracking()
-    //        where b.TimeSlotId == timeSlotId
-    //        select b.BookingId;
-
-    //    return q.Any();
-    //}
-
-    //private bool HasCustomerBookedOnDate(int customerId, DateOnly date) //dao
-    //{
-    //    var start = date.ToDateTime(TimeOnly.MinValue);
-    //    var end = date.AddDays(1).ToDateTime(TimeOnly.MinValue);
-
-    //    var q =
-    //        from b in _db.Bookings.AsNoTracking()
-    //        join ts in _db.TimeSlots.AsNoTracking() on b.TimeSlotId equals ts.TimeSlotId
-    //        where b.CustomerId == customerId
-    //           && ts.StartTime >= start
-    //           && ts.StartTime < end
-    //        select b.BookingId;
-
-    //    return q.Any();
-    //}
 
     private bool ServiceHasSufficientNotice(DetailService service, TimeSlot slot, DateTime currentUtc)
     {

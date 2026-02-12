@@ -14,7 +14,7 @@ namespace A1_AutoDetail.App.Persistence.Dao
     {
         private readonly AppDbContext _db;
 
-        public BookingDao(AppDbContext db)
+        public BookingDao(AppDbContext db) 
         {
             _db = db;
         }
@@ -40,20 +40,28 @@ namespace A1_AutoDetail.App.Persistence.Dao
             return _db.TimeSlots.Find(timeSlotId);
         }
 
-        public int AddBooking(Booking booking)
+        public int? AddBooking(Booking booking)
         {
-            _db.Bookings.Add(booking);
-            _db.SaveChanges();
+            try
+            {
+                _db.Bookings.Add(booking);
+                _db.SaveChanges();
 
-            return booking.BookingId;
+                return booking.BookingId;
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
 
         public bool IsTimeSlotBooked(int timeSlotId)
         {
             var q =
-            from b in _db.Bookings.AsNoTracking()
-            where b.TimeSlotId == timeSlotId
-            select b.BookingId;
+                from b in _db.Bookings.AsNoTracking()
+                where b.TimeSlotId == timeSlotId
+                select b.BookingId;
 
             return q.Any();
         }
