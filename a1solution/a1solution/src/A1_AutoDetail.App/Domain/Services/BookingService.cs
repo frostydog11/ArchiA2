@@ -45,7 +45,7 @@ public sealed class BookingService : IBookingService
         return BookingSucceeded(BookingOutcome.Success, "Booking created.", bookingId); 
     }
 
-    private int AddBooking(int customerId, int detailServiceId, int timeSlotId, DateTime nowUtc)
+    private int AddBooking(int customerId, int detailServiceId, int timeSlotId, DateTime nowUtc) // dao
     {
         var booking = new Booking();
         booking.CustomerId = customerId;
@@ -53,6 +53,8 @@ public sealed class BookingService : IBookingService
         booking.TimeSlotId = timeSlotId;
         booking.CreatedAt = nowUtc;
 
+
+        //could just make this a function   
         _db.Bookings.Add(booking);
         _db.SaveChanges();
 
@@ -77,7 +79,7 @@ public sealed class BookingService : IBookingService
         return r;
     }
 
-    private bool IsTimeSlotAlreadyBooked(int timeSlotId)
+    private bool IsTimeSlotAlreadyBooked(int timeSlotId) // dao
     {
         var q =
             from b in _db.Bookings.AsNoTracking()
@@ -87,7 +89,7 @@ public sealed class BookingService : IBookingService
         return q.Any();
     }
 
-    private bool HasCustomerBookedOnDate(int customerId, DateOnly date)
+    private bool HasCustomerBookedOnDate(int customerId, DateOnly date) //dao
     {
         var start = date.ToDateTime(TimeOnly.MinValue);
         var end = date.AddDays(1).ToDateTime(TimeOnly.MinValue);

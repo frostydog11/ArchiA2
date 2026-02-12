@@ -1,11 +1,12 @@
-﻿using System;
+﻿using A1_AutoDetail.App.Domain.Contracts;
+using A1_AutoDetail.App.Domain.Entities;
+using A1_AutoDetail.App.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using A1_AutoDetail.App.Domain.Contracts;
-using A1_AutoDetail.App.Domain.Entities;
-using A1_AutoDetail.App.Persistence;
 
 namespace A1_AutoDetail.App.Persistence.Dao
 {
@@ -37,6 +38,40 @@ namespace A1_AutoDetail.App.Persistence.Dao
         public TimeSlot FindTimeSlot (int timeSlotId)
         {
             return _db.TimeSlots.Find(timeSlotId);
+        }
+
+        public int AddBooking(Booking booking)
+        {
+            _db.Bookings.Add(booking);
+            _db.SaveChanges();
+
+            return booking.BookingId;
+        }
+
+        public bool IsTimeSlotBooked(int timeSlotId)
+        {
+            var q =
+            from b in _db.Bookings.AsNoTracking()
+            where b.TimeSlotId == timeSlotId
+            select b.BookingId;
+
+            return q.Any();
+        }
+
+        public bool HasCustomerBookedOnDate(int customerId, DateOnly date)
+        {
+            var start = date.ToDateTime(TimeOnly.MinValue);
+            var end = date.AddDays(1).ToDateTime(TimeOnly.MinValue);
+
+            var q =
+                from b in _db.Bookings.AsNoTracking()
+                join ts in _db.TimeSlots.AsNoTracking() on b.TimeSlotId equals ts.TimeSlotId
+                where b.CustomerId == customerId
+                   && ts.StartTime >= start
+                   && ts.StartTime < end
+                select b.BookingId;
+
+            return q.Any();
         }
     }
 }

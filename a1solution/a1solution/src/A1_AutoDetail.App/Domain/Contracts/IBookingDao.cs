@@ -16,5 +16,11 @@ namespace A1_AutoDetail.App.Domain.Contracts
         public DetailService FindDetailService(int detailId);
 
         public TimeSlot FindTimeSlot(int timeSlotId);
+
+        public int AddBooking(Booking booking);
+
+        public bool IsTimeSlotBooked(int timeSlotId);
+
+        public bool HasCustomerBookedOnDate(int customerId, DateOnly date);
     }
 }
