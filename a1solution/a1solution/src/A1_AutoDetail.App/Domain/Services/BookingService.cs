@@ -64,7 +64,7 @@ public sealed class BookingService : IBookingService
         var r = new BookingResult();
         r.Outcome = outcome;
         r.Message = message;
-        r.BookingId = bookingId;
+        r.BookingId = bookingId; // this is nullable in the signature but shouldn't ever actually be null
         return r;
     }
 
