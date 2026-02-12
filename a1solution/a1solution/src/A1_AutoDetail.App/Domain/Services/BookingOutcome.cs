@@ -9,5 +9,6 @@ public enum BookingOutcome
     CustomerBlocklisted = 4,
     CustomerAlreadyBookedThatDay = 5,
     TimeSlotUnavailable = 6,
-    TooSoonForService = 7
+    TooSoonForService = 7,
+    PersistenceError = 8
 }
